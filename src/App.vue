@@ -4,9 +4,24 @@
             <router-link to="/">Home</router-link> |
             <router-link to="/about">About</router-link>
         </div>
-        <router-view />
+        <div class="container">
+            <router-view />
+        </div>
+        <Footer />
     </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import Footer from "@/components/Footer.vue";
+
+export default {
+    name: "App",
+    components: {
+        Footer
+    }
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -15,6 +30,8 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    min-height: 100vh;
+    position: relative; /*←相対位置*/
 }
 
 #nav {
@@ -28,5 +45,8 @@
             color: #42b983;
         }
     }
+}
+
+.container {
 }
 </style>
