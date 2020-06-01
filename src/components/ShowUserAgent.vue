@@ -1,6 +1,6 @@
 <template>
     <div class="ShowUserAgent">
-        <h3>ユーザエージェントの表示</h3>
+        <h3>ユーザエージェントの取得</h3>
         <table v-for="(tableItem, key) in tableItems" :key="key">
             <thead>
                 <tr>
@@ -49,24 +49,24 @@ export default class ShowUserAgent extends Vue {
     navigatorPlugins = [...Array(navigator.plugins.length)].map(
         (_, i) => navigator.plugins[i].name
     );
-    navigatorCookieEnabled = [navigator.cookieEnabled];
     webStorage = [
         "SessionS: " + !window.sessionStorage,
-        "SessionS: " + !window.localStorage
+        "LocalS: " + !window.localStorage
     ];
-    browserName = [navigator.appName];
-    browserVersion = [parseInt(navigator.appVersion)];
+    timeZone = [new Date().toLocaleString({ timeZone: "Asia/Tokyo" })];
+    devicePixcel = [window.screen.height + " * " + window.screen.width];
 
     tableItems = [
         [
             "ソフトウェア特徴点",
             ["インストール済みプラグイン", this.navigatorPlugins],
-            ["HTTPクッキーの利用不可", this.navigatorCookieEnabled],
+            ["HTTPクッキーの利用不可", [navigator.cookieEnabled]],
             ["Web Storageの利用不可", this.webStorage],
-            ["Canvas Fingerprinting", []],
-            ["タイムゾーン", []],
-            ["ブラウザ名", this.browserName],
-            ["ブラウザのバージョン番号", this.browserVersion]
+            ["タイムゾーン", this.timeZone],
+            ["ブラウザ名", [navigator.appName]],
+            ["ブラウザのバージョン番号", [parseInt(navigator.appVersion)]],
+            ["ユーザのOS", [navigator.platform]],
+            ["ユーザの使用言語", [navigator.language]]
         ],
         [
             "ネットワーク特徴点",
@@ -88,7 +88,7 @@ export default class ShowUserAgent extends Vue {
             ["SSE2", []],
             ["タッチ機能", []],
             ["画面の向き", []],
-            ["デバイスピクセル比", []],
+            ["デバイスピクセル比", this.devicePixcel],
             ["カメラ・マイクの個数", []]
         ]
     ];
