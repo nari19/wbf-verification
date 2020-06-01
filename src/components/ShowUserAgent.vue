@@ -53,7 +53,6 @@ export default class ShowUserAgent extends Vue {
         "SessionS: " + !window.sessionStorage,
         "LocalS: " + !window.localStorage
     ];
-    timeZone = [new Date().toLocaleString({ timeZone: "Asia/Tokyo" })];
     devicePixcel = [window.screen.height + " * " + window.screen.width];
 
     tableItems = [
@@ -62,7 +61,6 @@ export default class ShowUserAgent extends Vue {
             ["インストール済みプラグイン", this.navigatorPlugins],
             ["HTTPクッキーの利用不可", [navigator.cookieEnabled]],
             ["Web Storageの利用不可", this.webStorage],
-            ["タイムゾーン", this.timeZone],
             ["ブラウザ名", [navigator.appName]],
             ["ブラウザのバージョン番号", [parseInt(navigator.appVersion)]],
             ["ユーザのOS", [navigator.platform]],
