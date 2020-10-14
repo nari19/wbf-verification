@@ -24,10 +24,8 @@
 
     </table>
     <p>
-        指標の参考 :
-        <a href="http://www.saitolab.org/fp_site/"
-            >Web Browser Fingerprint解説ページ</a
-        >
+      指標の参考 :
+      <a href="http://www.saitolab.org/fp_site/">Web Browser Fingerprint解説ページ</a>
     </p>
   </div>
 </template>
@@ -45,21 +43,44 @@ export default class ShowUserAgent extends Vue {
     "LocalS: " + !window.localStorage
   ];
   devicePixcel = [window.screen.height + " * " + window.screen.width];
+  deviceAvailPixcel = [window.screen.availHeight + " * " + window.screen.availWidth];
+  naUserAgent = navigator.userAgent.split("").map((v,i) => (i%35==34) ? v+"," : v).join("").split(",");
+  naMimeType = Object.keys(navigator.mimeTypes).map( v =>
+    ["type", "suffixes"].map( x => navigator.mimeTypes[v][x]).join(" | ")
+  );
+  wiScreenPixielDepth = [window.screen.pixielDepth ? window.screen.pixielDepth : "not supported"];
 
   tableItems = [
     [
       "ソフトウェア特徴点",
-      ["インストール済みプラグイン", this.navigatorPlugins],
-      ["ブラウザ名", [navigator.appName]],
+      ["x0: インストール済みプラグイン", this.navigatorPlugins],
+      ["x1: ブラウザ名", [navigator.appName]],
+      ["x2: ブラウザのバージョン番号", [parseInt(navigator.appVersion)]],
+      ["x3: ユーザエージェント", [navigator.userAgent]],
+      ["x4: mimeTypeオブジェクト", this.naMimeType],
+      ["x5: ユーザの使用言語", [navigator.language]],
+      ["x6: ユーザのOS", [navigator.platform]],
+      ["x7: appCodeName", [navigator.appCodeName]],
       ["HTTPクッキーの利用不可", [navigator.cookieEnabled]],
       ["Web Storageの利用不可", this.webStorage],
-      ["ブラウザのバージョン番号", [parseInt(navigator.appVersion)]],
-      ["ユーザのOS", [navigator.platform]],
-      ["ユーザの使用言語", [navigator.language]]
     ],
     [
-      "ネットワーク特徴点",
-      ["グローバルIPアドレス", []],
+      "ハードウェア・色深度特徴点",
+      ["x8 デバイスピクセル比", this.devicePixcel],
+      ["x9 screen.availHeight", this.deviceAvailPixcel],
+      ["x10 screen.colorDepth", [window.screen.colorDepth]],
+      ["x11 screen.pixielDepth", this.wiScreenPixielDepth],
+      ["リフレッシュノート", []],
+      ["ハードディスク空き容量", []],
+      ["CPUコア数", []],
+      ["SSE2", []],
+      ["タッチ機能", []],
+      ["画面の向き", []],
+      ["カメラ・マイクの個数", []]
+    ],
+    [
+      "その他",
+      ["x12 getTimezoneOffset", [(new Date).getTimezoneOffset()]],
       ["プライベートIPアドレス", []],
       ["LAN内に属するホストのIPアドレス", []],
       ["Acceptヘッダ", []],
@@ -68,17 +89,6 @@ export default class ShowUserAgent extends Vue {
       ["Accept-Language", []],
       ["CONNECTION", []],
       ["Referer", []]
-    ],
-    [
-      "ハードウェア・色深度特徴点",
-      ["リフレッシュノート", []],
-      ["ハードディスク空き容量", []],
-      ["CPUコア数", []],
-      ["SSE2", []],
-      ["タッチ機能", []],
-      ["画面の向き", []],
-      ["デバイスピクセル比", this.devicePixcel],
-      ["カメラ・マイクの個数", []]
     ]
   ];
 }
@@ -94,22 +104,26 @@ a {
 }
 table {
     margin: 2rem auto;
+    padding: 0 1rem;
     width: 100%;
     max-width: 380px;
     display: inline-block;
+    vertical-align: top;
     border-collapse: collapse;
-    position: relative;
-    left: 5rem;
     thead {
-        border-bottom: 2px solid #2c3e50;
+      border-bottom: 2px solid #2c3e50;
     }
     tr {
-        display: block;
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 4px 0;
-        }
+      display: block;
+      th {
+        width: 380px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 4px 0;
+        width: 90%;
+      }
     }
     .get_status {
         border-bottom: 1px solid #999;
