@@ -27,6 +27,7 @@
       指標の参考 :
       <a href="http://www.saitolab.org/fp_site/">Web Browser Fingerprint解説ページ</a>
     </p>
+    <canvas id="target"></canvas>
   </div>
 </template>
 
@@ -38,17 +39,23 @@ export default class ShowUserAgent extends Vue {
   navigatorPlugins = [...Array(navigator.plugins.length)].map(
     (_, i) => navigator.plugins[i].name
   );
-  webStorage = [
-    "SessionS: " + !window.sessionStorage,
-    "LocalS: " + !window.localStorage
-  ];
   devicePixcel = [window.screen.height + " * " + window.screen.width];
   deviceAvailPixcel = [window.screen.availHeight + " * " + window.screen.availWidth];
-  naUserAgent = navigator.userAgent.split("").map((v,i) => (i%35==34) ? v+"," : v).join("").split(",");
+  naUserAgent = navigator.userAgent.split("").map(
+    (v,i) => (i%35==34) ? v+"," : v
+  ).join("").split(",");
   naMimeType = Object.keys(navigator.mimeTypes).map( v =>
     ["type", "suffixes"].map( x => navigator.mimeTypes[v][x]).join(" | ")
   );
-  wiScreenPixielDepth = [window.screen.pixielDepth ? window.screen.pixielDepth : "not supported"];
+  wiScreenPixielDepth =
+    [window.screen.pixielDepth ? window.screen.pixielDepth : "not supported"];
+  otToDataUrl = [document.getElementById("target").toDataURL().slice(0,90)+"..."];
+  otGetImageData = [document
+    .getElementById('target').getContext('2d')
+    .getImageData(60, 60, 200, 100).data.join("").slice(0, 90)+"..."];
+  naConnection = ["onchange", "effectiveType", "rtt", "downlink", "saveData"].map(
+    v => v + ": " + navigator.connection[v]
+  );
 
   tableItems = [
     [
@@ -61,8 +68,24 @@ export default class ShowUserAgent extends Vue {
       ["x5: ユーザの使用言語", [navigator.language]],
       ["x6: ユーザのOS", [navigator.platform]],
       ["x7: appCodeName", [navigator.appCodeName]],
-      ["HTTPクッキーの利用不可", [navigator.cookieEnabled]],
-      ["Web Storageの利用不可", this.webStorage],
+      ["x12 getTimezoneOffset", [(new Date).getTimezoneOffset()]],
+      ["x13 getFontList", ['not supported', 'flashが使えるIEのみ']],
+      ["x14_a toDataURL", this.otToDataUrl],
+      ["x14_b getImageData", this.otGetImageData],
+      ["* x16 browser language", []],
+      ["* x17 system language", []],
+      ["* x21 do not track", []],
+      ["* x22 do not mstrack", []],
+      ["* x26 to lower case", []],
+      ["* x27 producet sub", []],
+      ["* x28 HTTPクッキーの利用不可", [navigator.cookieEnabled]],
+      ["* x30 open data base", []],
+      ["* x31 active x object", []],
+      ["* x32 Session Storageの利用不可", [!window.sessionStorage]],
+      ["* x33 Local Storageの利用不可", [!window.localStorage]],
+      ["* x34 indexed DB", []],
+      ["* x35 webGL rendering context", []],
+      ["* x36 swf object", []],
     ],
     [
       "ハードウェア・色深度特徴点",
@@ -70,24 +93,28 @@ export default class ShowUserAgent extends Vue {
       ["x9 screen.availHeight", this.deviceAvailPixcel],
       ["x10 screen.colorDepth", [window.screen.colorDepth]],
       ["x11 screen.pixielDepth", this.wiScreenPixielDepth],
+      ["* x18 deviceMemory", []],
+      ["* x19 CPUコア数", [navigator.hardwareConcurrency]],
+      ["* x20 CPUクラス", []],
+      ["* x23 タッチ機能", [navigator.maxTouchPoints]],
+      ["* x24 msタッチ機能", [navigator.msMaxTouchPoints]],
+      ["* x25 os cpu", [navigator.oscpu]],
+      ["* x29 device pixel ratio", [navigator.oscpu]],
       ["リフレッシュノート", []],
       ["ハードディスク空き容量", []],
-      ["CPUコア数", []],
       ["SSE2", []],
-      ["タッチ機能", []],
       ["画面の向き", []],
       ["カメラ・マイクの個数", []]
     ],
     [
-      "その他",
-      ["x12 getTimezoneOffset", [(new Date).getTimezoneOffset()]],
+      "ネットワーク特徴点",
+      ["* x15 CONNECTION", this.naConnection],
       ["プライベートIPアドレス", []],
       ["LAN内に属するホストのIPアドレス", []],
       ["Acceptヘッダ", []],
       ["Accept-Charset", []],
       ["Accept-Encoding", []],
       ["Accept-Language", []],
-      ["CONNECTION", []],
       ["Referer", []]
     ]
   ];
@@ -122,7 +149,8 @@ table {
         list-style-type: none;
         padding: 0;
         margin: 4px 0;
-        width: 90%;
+        width: 300px;
+        word-wrap: break-word;
       }
     }
     .get_status {
