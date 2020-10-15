@@ -25,7 +25,9 @@
     </table>
     <p>
       指標の参考 :
-      <a href="http://www.saitolab.org/fp_site/">Web Browser Fingerprint解説ページ</a>
+      <a href="http://www.saitolab.org/fp_site/">
+        Web Browser Fingerprint解説ページ
+      </a>
     </p>
     <canvas id="target"></canvas>
   </div>
@@ -99,7 +101,7 @@ export default class ShowUserAgent extends Vue {
       ["* x23 タッチ機能", [navigator.maxTouchPoints]],
       ["* x24 msタッチ機能", [navigator.msMaxTouchPoints]],
       ["* x25 os cpu", [navigator.oscpu]],
-      ["* x29 device pixel ratio", [navigator.oscpu]],
+      ["* x29 device pixel ratio", []],
       ["リフレッシュノート", []],
       ["ハードディスク空き容量", []],
       ["SSE2", []],
