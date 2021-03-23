@@ -4,7 +4,9 @@
     <table v-for="(tableItem, key) in tableItems" :key="key">
 
       <thead>
-        <tr><th>{{ tableItem[0] }}</th></tr>
+        <tr>
+          <th>{{ tableItem[0] }}</th>
+        </tr>
       </thead>
 
       <tbody>
@@ -15,10 +17,13 @@
           </tr>
           <!-- right -->
           <tr class="get_status" align="right">
-            <td><ul>
-              <li v-for="(getItem, key) in tableDom[1]" :key="key">{{ getItem }}</li>
-            </ul></td>
+            <td>
+              <ul>
+                <li v-for="(getItem, key) in tableDom[1]" :key="key">{{ getItem }}</li>
+              </ul>
+            </td>
           </tr>
+
         </span>
       </tbody>
 
@@ -51,13 +56,12 @@ export default class ShowUserAgent extends Vue {
   );
   wiScreenPixielDepth =
     [window.screen.pixielDepth ? window.screen.pixielDepth : "not supported"];
-  otToDataUrl = [document.getElementById("target").toDataURL().slice(0,90)+"..."];
-  otGetImageData = [document
-    .getElementById('target').getContext('2d')
-    .getImageData(60, 60, 200, 100).data.join("").slice(0, 90)+"..."];
-  naConnection = ["onchange", "effectiveType", "rtt", "downlink", "saveData"].map(
-    v => v + ": " + navigator.connection[v]
-  );
+  naConnection = 
+    ["onchange", "effectiveType", "rtt", "downlink", "saveData"].map(
+      v => v + ": " + navigator.connection[v]
+    );
+  otToDataUrl = [];
+  otGetImageData = [];
 
   tableItems = [
     [
@@ -80,11 +84,11 @@ export default class ShowUserAgent extends Vue {
       ["* x22 do not mstrack", []],
       ["* x26 to lower case", []],
       ["* x27 producet sub", []],
-      ["* x28 HTTPクッキーの利用不可", [navigator.cookieEnabled]],
+      ["* x28 HTTPクッキーの利用可否", [navigator.cookieEnabled]],
       ["* x30 open data base", []],
       ["* x31 active x object", []],
-      ["* x32 Session Storageの利用不可", [!window.sessionStorage]],
-      ["* x33 Local Storageの利用不可", [!window.localStorage]],
+      ["* x32 Session Storageの利用可否", [!window.sessionStorage]],
+      ["* x33 Local Storageの利用可否", [!window.localStorage]],
       ["* x34 indexed DB", []],
       ["* x35 webGL rendering context", []],
       ["* x36 swf object", []],
@@ -113,13 +117,20 @@ export default class ShowUserAgent extends Vue {
       ["* x15 CONNECTION", this.naConnection],
       ["プライベートIPアドレス", []],
       ["LAN内に属するホストのIPアドレス", []],
-      ["Acceptヘッダ", []],
-      ["Accept-Charset", []],
+      ["Acceptヘッダ", []], ["Accept-Charset", []],
       ["Accept-Encoding", []],
       ["Accept-Language", []],
       ["Referer", []]
     ]
   ];
+
+  mounted() {
+    this.otToDataUrl = [document.getElementById("target")
+      .toDataURL().slice(0,90)+"..."];
+    this.otGetImageData = [document
+      .getElementById('target').getContext('2d')
+      .getImageData(60, 60, 200, 100).data.join("").slice(0, 90)+"..."];
+  }
 }
 </script>
 
